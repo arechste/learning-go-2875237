@@ -5,28 +5,36 @@ import (
 )
 
 func main() {
-	fmt.Println("Hello from Go!")
-	doSomething()
-	sum := addValues(5, 8)
-	fmt.Println("the sum is", sum)
+	fmt.Println("func custom types")
+	poodle := Dog{"Poodle", 10, "Wuff"}
+	fmt.Println(poodle)
+	// print field/value of struct
+	fmt.Printf("%+v\n", poodle)
+	// print fields of struct
+	fmt.Printf("Breed: %v\nWeight %v\n", poodle.Breed, poodle.Weight)
 
-	multiSum, multiCount := addAllValues(4, 7, 9, 12)
-	fmt.Println("multiSum", multiSum)
-	fmt.Println("multiCount", multiCount)
+	poodle.Speak()
+	poodle.Sound = "Arf!"
+	poodle.Speak()
+
+	poodle.SpeakThreeTimes()
+	poodle.SpeakThreeTimes()
 }
 
-func doSomething() {
-	fmt.Println("Doing something")
+//Dog is a struct
+type Dog struct {
+	Breed  string
+	Weight int
+	Sound  string
 }
 
-func addValues(value1, value2 int) int {
-	return value1 + value2
+//Speak is how the dog speaks
+func (d Dog) Speak() {
+	fmt.Println(d.Sound)
 }
 
-func addAllValues(values ...int) (int, int) {
-	total := 0
-	for _, v := range values {
-		total += v
-	}
-	return total, len(values)
+//SpeakThreeTimes is multiSpeak dog speak
+func (d Dog) SpeakThreeTimes() {
+	d.Sound = fmt.Sprintf("%v %v %v", d.Sound, d.Sound, d.Sound)
+	fmt.Println(d.Sound)
 }
