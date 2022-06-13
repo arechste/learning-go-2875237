@@ -2,32 +2,27 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"io/ioutil"
-	"os"
+	"net/http"
 )
 
+const url = "http://services.explorecalifornia.org/json/tours.php"
+
 func main() {
-	content := "Hello from Go!"
-	file, err := os.Create("./fromString.txt")
-	fmt.Println("Files")
-	checkError(err)
 
-	length, err := io.WriteString(file, content)
-	checkError(err)
-	fmt.Printf("Wrote a file with %v characters\n", length)
-	defer file.Close()
-	defer readFile("./fromString.txt")
-}
+	resp, err := http.Get(url)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("Response type: %T\n", resp)
 
-func readFile(fileName string) {
-	data, err := ioutil.ReadFile(fileName)
-	checkError(err)
-	fmt.Println("Text read from file:", string(data))
-}
-func checkError(err error) {
+	defer resp.Body.Close()
+
+	bytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		panic(err)
 	}
 
+	content := string(bytes)
+	fmt.Print(content)
 }
